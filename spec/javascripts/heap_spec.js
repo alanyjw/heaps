@@ -1,6 +1,6 @@
 describe('Heap', function(){
 
-  var el, box;
+  var el, smallBox, bigBox;
 
   beforeEach(function(){
     var body = $('#jasmine_content').empty();
@@ -8,7 +8,8 @@ describe('Heap', function(){
     el = $('<div id="test" class="boxes"> </div>');
     el.appendTo(body);
 
-    box = $('<div class="box"> </div>');
+    smallBox = $('<div class="box small"> </div>');
+    bigBox = $('<div class="box big"> </div>');
   });
 
   it('has a canvas size of 300px', function(){
@@ -17,12 +18,16 @@ describe('Heap', function(){
   });
 
   it('has boxes of size 100px', function(){
-    el.append(box);
-    expect( box.width() ).toEqual( 100 );
-    expect( box.height() ).toEqual( 100 );
+    el.append(smallBox);
+    expect( smallBox.width() ).toEqual( 100 );
+    expect( smallBox.height() ).toEqual( 100 );
   });
 
-  function addSampleBoxes(el, n) {
+  function addSampleBoxes(el, n, box) {
+    if (box === null || box === undefined) {
+      box = smallBox;
+    }
+
     for(var i = 0; i < n; i++) {
       var b = box.clone();
       b.data('index', i);
@@ -32,7 +37,7 @@ describe('Heap', function(){
     return $('.box', el);
   }
 
-  describe('el.heapify(boxes)', function(){
+  describe('el.heapify(boxes) with small boxes', function(){
 
     var boxes, firstBox;
 
@@ -60,6 +65,22 @@ describe('Heap', function(){
         position = [ Math.round(position.left) , Math.round(position.top) ];
         expect(validPositions).toContain( position );
       });
+    });
+  });
+
+  describe('el.heapify(boxes) with big boxes', function(){
+    var firstBox;
+
+    beforeEach(function(){
+      firstBox = addSampleBoxes(el, 1, bigBox).first();
+      el.heapify('.box.big');
+    });
+
+    it('puts the first box in the center', function(){
+      var position = firstBox.position();
+      /* this is a 400x400 box on a 300x300 canvas */
+      expect( Math.round(position.top) ).toEqual(-50);
+      expect( Math.round(position.left) ).toEqual(-50);
     });
   });
 

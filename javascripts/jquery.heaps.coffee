@@ -65,11 +65,6 @@
 
         placement = coordinateToPlacement width, height, coordinate
 
-        continue if (placement.top < @top ||
-                     placement.right > @right ||
-                     placement.bottom > @bottom ||
-                     placement.left < @left)
-
         return placement if isFit placement
 
     coordinateToPlacement = (width, height, coordinate) =>

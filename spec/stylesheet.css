@@ -1,11 +1,18 @@
 div.box {
   background: green;
-
-  width: 100px;
-  height: 100px;
   display: block;
 
   /* becomes position: absolute */
+}
+
+div.small {
+  width: 100px;
+  height: 100px;
+}
+
+div.big {
+  width: 400px;
+  height: 400px;
 }
 
 div.boxes {
@@ -17,6 +24,8 @@ div.boxes {
 
   margin: 1em auto;
   box-sizing: border-box;
+
+  overflow: scroll;
 
   /* becomes position: relative */
 }

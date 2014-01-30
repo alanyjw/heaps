@@ -59,9 +59,6 @@
         for (_i = 0, _len = _ref.length; _i < _len; _i++) {
           coordinate = _ref[_i];
           placement = coordinateToPlacement(width, height, coordinate);
-          if (placement.top < _this.top || placement.right > _this.right || placement.bottom > _this.bottom || placement.left < _this.left) {
-            continue;
-          }
           if (isFit(placement)) {
             return placement;
           }
