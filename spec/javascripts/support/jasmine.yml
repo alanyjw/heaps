@@ -52,6 +52,7 @@ helpers:
 #   - **/*[sS]pec.js
 #
 spec_files:
+  - heap_spec.js
 
 # src_dir
 #
