@@ -1,127 +1,126 @@
-describe('Heap', function(){
-
-  var el, smallBox, bigBox;
-
-  beforeEach(function(){
-    var body = $('#jasmine_content').empty();
-
-    el = $('<div id="test" class="boxes"> </div>');
-    el.appendTo(body);
-
-    smallBox = $('<div class="box small"> </div>');
-    bigBox = $('<div class="box big"> </div>');
-  });
-
-  it('has a canvas size of 300px', function(){
-    expect( el.width() ).toEqual( 300 );
-    expect( el.height() ).toEqual( 300 );
-  });
-
-  it('has boxes of size 100px', function(){
-    el.append(smallBox);
-    expect( smallBox.width() ).toEqual( 100 );
-    expect( smallBox.height() ).toEqual( 100 );
-  });
-
-  function addSampleBoxes(el, n, box) {
+describe("Heap", function() {
+  var addSampleBoxes, bigBox, el, smallBox;
+  el = void 0;
+  smallBox = void 0;
+  bigBox = void 0;
+  addSampleBoxes = function(el, n, box) {
+    var b, i;
     if (box === null || box === undefined) {
       box = smallBox;
     }
-
-    for(var i = 0; i < n; i++) {
-      var b = box.clone();
-      b.data('index', i);
+    i = 0;
+    while (i < n) {
+      b = box.clone();
+      b.data("index", i);
       b.appendTo(el);
+      i++;
     }
-
-    return $('.box', el);
-  }
-
-  describe('el.heapify(boxes) with small boxes', function(){
-
+    return $(".box", el);
+  };
+  beforeEach(function() {
+    var body;
+    body = $("#jasmine_content").empty();
+    el = $("<div id=\"test\" class=\"boxes\"> </div>");
+    el.appendTo(body);
+    smallBox = $("<div class=\"box small\"> </div>");
+    return bigBox = $("<div class=\"box big\"> </div>");
+  });
+  it("has a canvas size of 300px", function() {
+    expect(el.width()).toEqual(300);
+    return expect(el.height()).toEqual(300);
+  });
+  it("has boxes of size 100px", function() {
+    el.append(smallBox);
+    expect(smallBox.width()).toEqual(100);
+    return expect(smallBox.height()).toEqual(100);
+  });
+  describe("el.heapify(boxes) with small boxes", function() {
     var boxes, firstBox;
-
-    beforeEach(function(){
-      boxes = addSampleBoxes(el, 5)
-      el.heapify('.box');
-      firstBox = boxes.first();
+    boxes = void 0;
+    firstBox = void 0;
+    beforeEach(function() {
+      boxes = addSampleBoxes(el, 5);
+      el.heapify(".box");
+      return firstBox = boxes.first();
     });
-
-    it('puts the first box in the center', function(){
-      var position = firstBox.position();
-      /* this is a 100x100 box on a 300x300 canvas == offset of 100x100 */
-      expect( Math.round(position.top) ).toEqual(100);
-      expect( Math.round(position.left) ).toEqual(100);
+    it("puts the first box in the center", function() {
+      var position;
+      position = firstBox.position();
+      expect(Math.round(position.top)).toEqual(100);
+      return expect(Math.round(position.left)).toEqual(100);
     });
-
-    it('builds a simple cross for 5 boxes', function(){
-      var validPositions =  [ [0, 100],
-                              [100, 0],
-                              [200, 100],
-                              [100, 200] ];
-
-      boxes.not(firstBox).each(function(i, el){
-        var position = $(el).position();
-        position = [ Math.round(position.left) , Math.round(position.top) ];
-        expect(validPositions).toContain( position );
+    return it("builds a simple cross for 5 boxes", function() {
+      var validPositions;
+      validPositions = [[0, 100], [100, 0], [200, 100], [100, 200]];
+      return boxes.not(firstBox).each(function(i, el) {
+        var position;
+        position = $(el).position();
+        position = [Math.round(position.left), Math.round(position.top)];
+        return expect(validPositions).toContain(position);
       });
     });
   });
-
-  describe('el.heapify(boxes) with big boxes', function(){
+  describe("el.heapify(boxes) with big boxes", function() {
     var firstBox;
-
-    beforeEach(function(){
+    firstBox = void 0;
+    beforeEach(function() {
       firstBox = addSampleBoxes(el, 1, bigBox).first();
-      el.heapify('.box.big');
+      return el.heapify(".box.big");
     });
-
-    it('puts the first box in the center', function(){
-      var position = firstBox.position();
-      /* this is a 400x400 box on a 300x300 canvas */
-      expect( Math.round(position.top) ).toEqual(-50);
-      expect( Math.round(position.left) ).toEqual(-50);
+    return it("puts the first box in the center", function() {
+      var position;
+      position = firstBox.position();
+      expect(Math.round(position.top)).toEqual(-50);
+      return expect(Math.round(position.left)).toEqual(-50);
     });
   });
-
-  describe('el.heapify(boxes, { sort: true/false })', function(){
-
+  describe("el.heapify(boxes, { sort: true/false })", function() {
     var boxes, firstBox;
-
-    beforeEach(function(){
-      boxes = addSampleBoxes(el, 3);
+    boxes = void 0;
+    firstBox = void 0;
+    beforeEach(function() {
+      return boxes = addSampleBoxes(el, 3);
     });
-
-    it("places the largest boxes first", function(){
-      // reverse size order
-      boxes.eq(0).css({ width: '90px', height: '90px' });
-      boxes.eq(2).css({ width: '110px', height: '110px' });
-
-      el.heapify('.box', { sort: true });
-
-      // last should be in the center
-      var position = boxes.eq(2).position();
-      expect( Math.round(position.top) ).toEqual(90);
-      expect( Math.round(position.left) ).toEqual(90);
+    return it("places the largest boxes first", function() {
+      var position;
+      boxes.eq(0).css({
+        width: "90px",
+        height: "90px"
+      });
+      boxes.eq(2).css({
+        width: "110px",
+        height: "110px"
+      });
+      el.heapify(".box", {
+        sort: true
+      });
+      position = boxes.eq(2).position();
+      expect(Math.round(position.top)).toEqual(90);
+      return expect(Math.round(position.left)).toEqual(90);
     });
-
   });
-
-  // helper functions
-  describe('helper functions', function(){
+  return describe("helper functions", function() {
     var heap;
-
-    beforeEach(function(){
+    heap = void 0;
+    beforeEach(function() {
       el.heapify();
-      heap = el.data('heap');
+      return heap = el.data("heap");
     });
-
-    describe('findBestPlacement', function(){
-      it('returns a would-be centered box', function(){
-        expect( heap.findBestPlacement(20,20) ).toEqual({ top: 140, right: 159, bottom: 159, left: 140 });
-        expect( heap.findBestPlacement(300,300) ).toEqual({ top: 0, right: 299, bottom: 299, left:   0 });
+    return describe("findBestPlacement", function() {
+      return it("returns a would-be centered box", function() {
+        expect(heap.findBestPlacement(20, 20)).toEqual({
+          top: 140,
+          right: 159,
+          bottom: 159,
+          left: 140
+        });
+        return expect(heap.findBestPlacement(300, 300)).toEqual({
+          top: 0,
+          right: 299,
+          bottom: 299,
+          left: 0
+        });
       });
     });
   });
-
 });
