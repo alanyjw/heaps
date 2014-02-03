@@ -64,11 +64,13 @@ describe "Heap", ->
         expect(validPositions).toContain position
 
   describe "el.heapify(boxes) with big boxes", ->
+    boxes = undefined
     firstBox = undefined
 
     beforeEach ->
       firstBox = addSampleBoxes(el, 1, bigBox).first()
-      el.heapify ".box.big"
+      boxes = addSampleBoxes(el, 4)
+      el.heapify ".box"
 
     it "puts the first box in the center", ->
       position = firstBox.position()
@@ -76,6 +78,22 @@ describe "Heap", ->
       # this is a 400x400 box on a 300x300 canvas 
       expect(Math.round(position.top)).toEqual -50
       expect(Math.round(position.left)).toEqual -50
+
+    it "builds a simple cross for 5 boxes", ->
+      validPositions = [
+        [ 0,100 ]
+        [ 100,0 ]
+        [ 200,100 ]
+        [ 100,200 ]
+      ]
+
+      boxes.not(firstBox).each (i, el) ->
+        position = $(el).position()
+        position = [
+          Math.round(position.left)
+          Math.round(position.top)
+        ]
+        expect(validPositions).toContain position
 
   describe "el.heapify(boxes, { sort: true/false })", ->
     boxes = undefined

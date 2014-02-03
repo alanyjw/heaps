@@ -15,15 +15,29 @@
 
       @$el.css({ position: 'relative' })
 
-      width = @$el.outerWidth()
-      height = @$el.outerHeight()
+      boundingBox = ->
+        elements = $ selector
+        totalWidths = 0
+        totalHeights = 0
 
-      @top = 0
-      @right = width
-      @bottom = height
-      @left = 0
+        $.each elements, (_, e) ->
+          totalWidths += $(e).width()
+          totalHeights += $(e).height()
+
+        dim = Math.max totalWidths, totalHeights
+        dim
+
+      total = boundingBox()
+
+      width = Math.max total, @$el.outerWidth()
+      height = Math.max total, @$el.outerHeight()
+
+      #width = @$el.outerWidth()
+      #height = @$el.outerHeight()
+      #console.log width, height
 
       @center = [ width/2, height/2 ]
+      console.log @center
 
       @sortedCoordinates = sortCoordinates width, height
       @placedElements = []
@@ -32,6 +46,9 @@
         elements = $(selector, @el)
         elements = elements.sort(bySize) if @options.sort
         elements.each place
+
+      @$el.scrollLeft @center[0]
+      @$el.scrollTop @center[1]
 
       @ # return this
 
@@ -46,6 +63,7 @@
       height = $el.outerHeight()
 
       placement = @findBestPlacement width, height
+      console.log placement
 
       return null unless placement
       @placedElements.push placement
